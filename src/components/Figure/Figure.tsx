@@ -13,6 +13,8 @@ const Figure : React.FunctionComponent = () => {
      <div className='w-1 h-20 bg-white absolute ml-48 mt-[calc(8rem-3px)]'/>
      <div className='h-1 w-12 bg-white absolute top-40 ml-[calc(192px+48px)] -rotate-45 origin-left'/>
      <div className='h-1 w-12 bg-white absolute top-40 ml-[calc(192px-48px)] rotate-45 origin-right'/>
+     <div className='h-1 w-12 bg-white absolute top-48 ml-[calc(192px-48px)] -rotate-45 origin-right mt-2'/>
+     <div className='h-1 w-12 bg-white absolute top-48 ml-[calc(192px+48px)] rotate-45 origin-left mt-2'/>
 
      
 
