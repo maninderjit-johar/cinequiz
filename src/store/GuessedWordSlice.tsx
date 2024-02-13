@@ -10,7 +10,7 @@ interface GuessedWordState {
 const initialState: GuessedWordState = {
   value: [],
   maxCount: 0,
-  wordToGuess: "Jab We Met",
+  wordToGuess: "Ting Ling",
 };
 export const guessedWordSlice = createSlice({
   name: "guessedWord",
@@ -30,4 +30,6 @@ export const { addToGuessedWord } = guessedWordSlice.actions;
 
 export const guessedWord = (state: RootState) => state.guessedWordSlice.value;
 export const maxCount = (state: RootState) => state.guessedWordSlice.maxCount;
+export const wordToGuess = (state: RootState) =>
+  state.guessedWordSlice.wordToGuess;
 export default guessedWordSlice.reducer;

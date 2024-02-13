@@ -1,10 +1,13 @@
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useAppSelector } from "../../hooks/hooks";
+import { wordToGuess } from "./../../store/GuessedWordSlice";
 
 const Word: React.FunctionComponent = () => {
   const guessedWord = useAppSelector((state) => state.guessedWordSlice.value);
-  const [wordFromApi, setWordFromApi] = useState<string>("Jab We Met");
+  const wordToGuess = useAppSelector(
+    (state) => state.guessedWordSlice.wordToGuess
+  );
 
   //const guessedWord: string[] = ["t", "e"];
 
@@ -20,7 +23,7 @@ const Word: React.FunctionComponent = () => {
     return true;
   };
 
-  return wordFromApi.split("").map((item: string, index: number) =>
+  return wordToGuess.split("").map((item: string, index: number) =>
     item === " " ? (
       <div key={index} className="block w-8 m-x-2" />
     ) : (
