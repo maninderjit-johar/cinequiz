@@ -2,7 +2,7 @@ import React from "react";
 
 const Figure: React.FunctionComponent = () => {
   return (
-    <div className="text-3xl sm:my-8  mt-16 mb-1 border-2 rounded w-2/3 h-full relative flex justify-center min-w-[350px] shadow-sm shadow-gray-400 ">
+    <div className="text-3xl sm:my-8  mt-16 mb-1 border-0 rounded w-2/3 h-full relative flex justify-center min-w-[350px]">
       {/* vertical line  */}
       <div className="w-2 bg-white h-full sm:mr-24 relative mr-40" />
 

@@ -9,8 +9,8 @@ function App() {
   const [count, setCount] = useState(0);
 
   return (
-    <>
-      <div className="max-w-screen-md mx-auto flex items-center flex-col md:h-1/2 h-[calc(50%-10%)] gap-10">
+    <div className="h-lvh backdrop-blur-sm backdrop-opacity-75 bg-blend-darken contrast-125">
+      <div className="backdrop-blur-sm max-w-screen-md mx-auto flex items-center flex-col md:h-1/2 h-[calc(50%-10%)] gap-10">
         <Figure />
       </div>
 
@@ -21,7 +21,7 @@ function App() {
       <div className="flex justify-center">
         <Keyboard />
       </div>
-    </>
+    </div>
   );
 }
 

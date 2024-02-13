@@ -1,11 +1,16 @@
 import React, { useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { useAppSelector } from "../../hooks/hooks";
 
 const Word: React.FunctionComponent = () => {
-  const [wordFromApi, setWordFromApi] = useState<string>(
-    "Testin23g with spaces"
-  );
+  const guessedWord = useAppSelector((state) => state.guessedWordSlice.value);
+  const [wordFromApi, setWordFromApi] = useState<string>("Jab We Met");
 
-  const guessedWord: string[] = ["t", "e"];
+  //const guessedWord: string[] = ["t", "e"];
+
+  const [maxCount, setMaxCount] = useState<number>(0);
+
+  console.log(guessedWord);
 
   const processingString = (char: string): Boolean => {
     if (/[a-zA-Z]/.test(char) && !guessedWord.includes(char.toLowerCase())) {
@@ -17,11 +22,10 @@ const Word: React.FunctionComponent = () => {
 
   return wordFromApi.split("").map((item: string, index: number) =>
     item === " " ? (
-      <div className="block w-8 m-x-2" />
+      <div key={index} className="block w-8 m-x-2" />
     ) : (
-      <div className="flex flex-col items-center">
+      <div key={index} className="flex flex-col items-center">
         <span
-          key={index}
           className={` uppercase  m-2 w-6 text-center text-2xl ${
             processingString(item) ? "visible" : "invisible"
           }`}
@@ -29,7 +33,7 @@ const Word: React.FunctionComponent = () => {
           {item}
         </span>
 
-        <span className="border-gray-100 uppercase border-b-2 m-x-2 w-6"></span>
+        <span className="border-gray-100 uppercase border-b-4 rounded-lg m-x-2 w-8"></span>
       </div>
     )
   );
