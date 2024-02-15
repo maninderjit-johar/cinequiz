@@ -7,19 +7,22 @@ const Keyboard: React.FunctionComponent = () => {
   const dispatch = useAppDispatch();
   const guessedWord = useAppSelector((state) => state.guessedWordSlice.value);
   const maxCount = useAppSelector((state) => state.guessedWordSlice.maxCount);
+  const movieName = useAppSelector(
+    (state) => state.guessedWordSlice.wordToGuess
+  );
   const [wordFromApi, setWordFromApi] = useState<string>("Jab We Met");
 
   const alphabets: string[] = letters.abc;
   //console.log("Letters", alphabets);
 
   const screenKeyboardHandler = (val: string) => {
-    if (maxCount <= 6) {
+    if (maxCount < 6) {
       console.log("max count less than 6");
 
       dispatch(addToGuessedWord(val));
       console.log(maxCount);
     } else {
-      console.log("DONE!!", guessedWord);
+      alert(movieName);
     }
   };
 

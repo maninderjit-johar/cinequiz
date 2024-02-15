@@ -1,12 +1,34 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import "./App.css";
 import Figure from "./components/Figure/Figure";
 import Keyboard from "./components/Keyboard/Keyboard";
 import Word from "./components/Word/Word";
 
+import { useAppDispatch, useAppSelector } from "./hooks/hooks";
+import { fetchMovieName } from "./store/GuessedWordSlice";
+
 function App() {
+  const dispatch = useAppDispatch();
   const [count, setCount] = useState(0);
+  const movieName = useAppSelector(
+    (state) => state.guessedWordSlice.wordToGuess
+  );
+
+  /*  useEffect(() => {
+    if (movieName.trim().length === 0) {
+      
+      setMovieName(dispatch(fetchMovieName());
+      
+    }
+  }, [movieName]); */
+
+  useEffect(() => {
+    if (movieName.trim().length === 0) {
+      dispatch(fetchMovieName());
+    }
+  }, []);
+  console.log(movieName);
 
   return (
     <div className="h-lvh backdrop-blur-sm backdrop-opacity-75 bg-blend-darken contrast-125">
