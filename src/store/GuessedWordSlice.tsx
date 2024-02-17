@@ -38,7 +38,7 @@ page=${page_num}&with_genres=28&include_adult=false&include_video=false&language
         response.data.results.length - 1
       );
 
-      console.log("Movie Data", response, random_num);
+      // console.log("Movie Data", response, random_num);
       return response.data.results[random_num].title;
     } else {
       return "Error Getting Movie";
@@ -52,13 +52,26 @@ export const guessedWordSlice = createSlice({
     addToGuessedWord: (state, action: PayloadAction<string>) => {
       if (state.maxCount <= 6) {
         if (state.wordToGuess.toLowerCase().includes(action.payload)) {
-          state.value.push(action.payload);
+          if (!state.value.includes(action.payload)) {
+            state.value.push(action.payload);
+          }
         } else {
           state.maxCount += 1;
         }
       } else {
         alert(state.wordToGuess + " is the correct word!");
       }
+    },
+
+    showAnswer: (state) => {
+      state.wordToGuess
+        .split("")
+        .forEach(
+          (item: string) =>
+            /[a-zA-Z]/.test(item.toLowerCase()) &&
+            !state.value.includes(item.toLowerCase()) &&
+            state.value.push(item.toLowerCase())
+        );
     },
   },
   extraReducers: (builder) => {
@@ -68,7 +81,7 @@ export const guessedWordSlice = createSlice({
   },
 });
 
-export const { addToGuessedWord } = guessedWordSlice.actions;
+export const { addToGuessedWord, showAnswer } = guessedWordSlice.actions;
 
 export const guessedWord = (state: RootState) => state.guessedWordSlice.value;
 export const maxCount = (state: RootState) => state.guessedWordSlice.maxCount;
