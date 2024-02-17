@@ -1,19 +1,27 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { useAppSelector } from "../../hooks/hooks";
-import { wordToGuess } from "./../../store/GuessedWordSlice";
+import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
+import { showAnswer, wordToGuess } from "./../../store/GuessedWordSlice";
 
 const Word: React.FunctionComponent = () => {
   const guessedWord = useAppSelector((state) => state.guessedWordSlice.value);
+  const maxCount = useAppSelector((state) => state.guessedWordSlice.maxCount);
+
   const wordToGuess = useAppSelector(
     (state) => state.guessedWordSlice.wordToGuess
   );
 
+  const dispatch = useAppDispatch();
   //const guessedWord: string[] = ["t", "e"];
 
-  const [maxCount, setMaxCount] = useState<number>(0);
+  useEffect(() => {
+    if (maxCount === 6) {
+      alert("Game Done");
+      dispatch(showAnswer());
+    }
+  }, [maxCount]);
 
-  console.log(guessedWord);
+  console.log("%c Incorrect Response Count:", "color:pink", maxCount);
 
   const processingString = (char: string): Boolean => {
     if (/[a-zA-Z]/.test(char) && !guessedWord.includes(char.toLowerCase())) {
