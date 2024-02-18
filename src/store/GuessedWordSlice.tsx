@@ -22,11 +22,12 @@ export const fetchMovieName = createAsyncThunk(
       1,
       import.meta.env.VITE_MOVIEDB_TOTAL_PAGES
     );
+    console.log("Page Num", page_num);
+
     const base_url = import.meta.env.VITE_MOVIEDB_BASE_URL;
     const strict_filters = `api_key=${
       import.meta.env.VITE_MOVIEDB
-    }&import movieNameSlice from './MovieNameSlice';
-page=${page_num}&with_genres=28&include_adult=false&include_video=false&language=en-US&with_original_language=en`;
+    }&page=${page_num}&with_genres=28&include_adult=false&include_video=false&language=en-US&with_original_language=en`;
 
     const url = base_url + strict_filters;
 

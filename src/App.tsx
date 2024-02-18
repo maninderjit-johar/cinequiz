@@ -7,10 +7,18 @@ import Word from "./components/Word/Word";
 
 import { useAppDispatch, useAppSelector } from "./hooks/hooks";
 import { fetchMovieName } from "./store/GuessedWordSlice";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 function App() {
   const dispatch = useAppDispatch();
-  const [count, setCount] = useState(0);
+  const [open, setOpen] = useState<boolean>(false);
   const movieName = useAppSelector(
     (state) => state.guessedWordSlice.wordToGuess
   );

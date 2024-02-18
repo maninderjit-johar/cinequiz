@@ -68,13 +68,13 @@ const Keyboard: React.FunctionComponent = () => {
         <div
           tabIndex={0}
           key={item}
-          className={`bg-white text-black font-bold text-lg border-2
+          className={`bg-white text-black font-bold md:text-lg text-sm border-2
            border-gray-200 px-3 py-2 rounded m-2 uppercase
-           hover:cursor-pointer hover:bg-slate-300 w-10 h-10
+           hover:cursor-pointer hover:bg-slate-300 md:w-10 md:h-10 w-8 h-8              
            flex justify-center items-center hover:shadow-md hover:shadow-gray-600
            ${
              usedLetters.includes(item.toLowerCase()) &&
-             "hover:cursor-not-allowed bg-gray-600 opacity-90 text-white"
+             "hover:cursor-not-allowed bg-gray-600 hover:bg-gray-600 opacity-90 text-white hover:shadow-none"
            }
            `}
           onClick={() => screenKeyboardHandler(item)}
