@@ -37,7 +37,7 @@ const Word: React.FunctionComponent = () => {
     ) : (
       <div key={index} className="flex flex-col items-center">
         <span
-          className={` uppercase  m-2 w-6 text-center text-2xl ${
+          className={` uppercase  m-2 w-6 text-center text-2xl text-white font-bold ${
             processingString(item) ? "visible" : "invisible"
           }`}
         >
