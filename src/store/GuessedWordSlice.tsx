@@ -15,22 +15,43 @@ const initialState: GuessedWordState = {
   wordToGuess: "",
 };
 
+const fetchForNumberOfPages = async (url: string) => {
+  let response = await axios.get(url);
+  return response.data.total_pages;
+};
+
 export const fetchMovieName = createAsyncThunk(
   "movieName/fetchMovieName",
   async () => {
-    const page_num = randomNumberGenerator(
-      1,
-      import.meta.env.VITE_MOVIEDB_TOTAL_PAGES
-    );
     const base_url = import.meta.env.VITE_MOVIEDB_BASE_URL;
     const strict_filters = `api_key=${
       import.meta.env.VITE_MOVIEDB
-    }&import movieNameSlice from './MovieNameSlice';
-page=${page_num}&with_genres=28&include_adult=false&include_video=false&language=en-US&with_original_language=en`;
+    }&with_genres=28&include_adult=false&include_video=false&language=en-US&with_original_language=en`;
 
     const url = base_url + strict_filters;
 
-    const response = await axios.get(url);
+    let total_pages = await fetchForNumberOfPages(url);
+
+    console.log("Total Pages", total_pages);
+
+    const page_num = randomNumberGenerator(
+      1,
+      total_pages
+      //import.meta.env.VITE_MOVIEDB_TOTAL_PAGES
+    );
+    console.log("Page Num", page_num);
+
+    let new_filters = `api_key=${
+      import.meta.env.VITE_MOVIEDB
+    }&page=${page_num}&with_genres=28&include_adult=false&include_video=false&language=en-US&with_original_language=en`;
+    /* const base_url = import.meta.env.VITE_MOVIEDB_BASE_URL;
+      const strict_filters = `api_key=${
+        import.meta.env.VITE_MOVIEDB
+      }&page=${page_num}&with_genres=28&include_adult=false&include_video=false&language=en-US&with_original_language=en`;*/
+
+    const new_url = base_url + new_filters;
+
+    const response = await axios.get(new_url);
 
     if (response) {
       let random_num = randomNumberGenerator(
