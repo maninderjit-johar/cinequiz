@@ -4,7 +4,7 @@ import { useAppSelector } from "../../hooks/hooks";
 const Figure: React.FunctionComponent = () => {
   const maxCount = useAppSelector((state) => state.guessedWordSlice.maxCount);
   return (
-    <div className="text-3xl sm:my-8  mt-16 mb-1 border-0 rounded w-2/3 h-full relative flex justify-center min-w-[350px]">
+    <div className="text-3xl sm:my-8  mt-4 mb-1 border-0 rounded w-2/3 h-full relative flex justify-center min-w-[350px]">
       {/* vertical line  */}
       <div className="w-2 bg-white h-full sm:mr-24 relative mr-40" />
 

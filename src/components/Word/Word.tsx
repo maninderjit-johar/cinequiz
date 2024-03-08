@@ -31,6 +31,29 @@ const Word: React.FunctionComponent = () => {
     return true;
   };
 
+  const wordsArray = wordToGuess.split(" ");
+
+  return (
+    <div>
+      {wordsArray.map((word, wordIndex) => (
+        <div key={wordIndex} className="flex flex-wrap justify-center">
+          {word.split("").map((char, charIndex) => (
+            <div key={charIndex} className="flex flex-col items-center">
+              <span
+                className={`uppercase m-2 w-6 text-center text-2xl text-white font-bold ${
+                  processingString(char) ? "visible" : "invisible"
+                }`}
+              >
+                {char}
+              </span>
+              <span className="border-gray-100 uppercase border-b-4 rounded-lg m-x-2 w-8"></span>
+            </div>
+          ))}
+        </div>
+      ))}
+    </div>
+  );
+  /* 
   return wordToGuess.split("").map((item: string, index: number) =>
     item === " " ? (
       <div key={index} className="block w-8 m-x-2" />
@@ -47,7 +70,7 @@ const Word: React.FunctionComponent = () => {
         <span className="border-gray-100 uppercase border-b-4 rounded-lg m-x-2 w-8"></span>
       </div>
     )
-  );
+  ); */
 };
 
 export default Word;

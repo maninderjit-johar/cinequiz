@@ -70,7 +70,7 @@ export const StartModal = ({ open, closeModal }: ModalProps): JSX.Element => {
             className="md:w-2/6 bg-gray-500 inline-block "
             onClick={closeModal}
           >
-            Close
+            Play as Guest
           </Button>
         </DialogFooter>
       </DialogContent>
