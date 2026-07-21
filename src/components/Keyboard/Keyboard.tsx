@@ -1,88 +1,59 @@
-import React, { KeyboardEvent, useEffect, useState } from "react";
+import { useEffect } from "react";
+
 import letters from "./data.json";
 import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
 import { addToGuessedWord } from "../../store/GuessedWordSlice";
 
-const Keyboard: React.FunctionComponent = () => {
+const Keyboard = () => {
   const dispatch = useAppDispatch();
-  const guessedWord = useAppSelector((state) => state.guessedWordSlice.value);
-
-  const maxCount = useAppSelector((state) => state.guessedWordSlice.maxCount);
-  const movieName = useAppSelector(
-    (state) => state.guessedWordSlice.wordToGuess
-  );
-
-  const [usedLetters, setUsedLetters] = useState<string[]>([]);
-  //  const [wordFromApi, setWordFromApi] = useState<string>("Jab We Met");
-
+  const { status, usedLetters, wordToGuess } = useAppSelector((state) => state.guessedWordSlice);
   const alphabets: string[] = letters.abc;
-
-  //console.log("Guessed Word", guessedWord);
-  //console.log("Used Letters", usedLetters);
+  const isDisabled = status !== "playing";
 
   useEffect(() => {
+    const keyPressHandler = (event: globalThis.KeyboardEvent) => {
+      const letter = event.key.toLowerCase();
+
+      if (/^[a-z]$/.test(letter)) {
+        dispatch(addToGuessedWord(letter));
+      }
+    };
+
     window.addEventListener("keydown", keyPressHandler);
 
     return () => {
       window.removeEventListener("keydown", keyPressHandler);
     };
-  }, []);
-  const screenKeyboardHandler = (val: string) => {
-    if (
-      !usedLetters.includes(val.toLowerCase()) &&
-      /[a-zA-Z]/.test(val.toLowerCase())
-    ) {
-      setUsedLetters((prevLetters) => [...prevLetters, val.toLowerCase()]);
+  }, [dispatch]);
 
-      if (maxCount < 6) {
-        //console.log("max count less than 6");
-
-        dispatch(addToGuessedWord(val));
-      } else {
-        alert(movieName);
-      }
-    }
-  };
-
-  const keyPressHandler = (e: KeyboardEvent) => {
-    console.log(e.key);
-    console.log(maxCount);
-    if (
-      !usedLetters.includes(e.key.toLowerCase()) &&
-      /[a-zA-Z]/.test(e.key.toLowerCase())
-    ) {
-      setUsedLetters((prevLetters) => [...prevLetters, e.key.toLowerCase()]);
-
-      if (maxCount < 6) {
-        // console.log("max count less than 6");
-
-        dispatch(addToGuessedWord(e.key.toLowerCase()));
-      } else {
-        alert(movieName);
-      }
-    }
-  };
   return (
-    <div className="flex sm:max-w-lg max-w-sm flex-wrap justify-center">
-      {alphabets.map((item: string) => (
-        <div
-          tabIndex={0}
-          key={item}
-          className={`bg-white text-black font-bold md:text-lg text-sm border-2
-           border-gray-200 px-3 py-2 rounded m-2 uppercase
-           hover:cursor-pointer hover:bg-slate-300 md:w-10 md:h-10 w-8 h-8              
-           flex justify-center items-center hover:shadow-md hover:shadow-gray-600
-           ${
-             usedLetters.includes(item.toLowerCase()) &&
-             "hover:cursor-not-allowed bg-gray-600 hover:bg-gray-600 opacity-90 text-white hover:shadow-none"
-           }
-           `}
-          onClick={() => screenKeyboardHandler(item)}
-          onKeyDown={keyPressHandler}
-        >
-          {item}
-        </div>
-      ))}
+    <div className="mx-auto flex max-w-2xl flex-wrap justify-center gap-2">
+      {alphabets.map((item: string) => {
+        const letter = item.toLowerCase();
+        const hasBeenUsed = usedLetters.includes(letter);
+        const isCorrectGuess = hasBeenUsed && wordToGuess.toLowerCase().includes(letter);
+        const isWrongGuess = hasBeenUsed && !isCorrectGuess;
+        const usedStyle = isCorrectGuess
+          ? "border-emerald-300/45 bg-emerald-300/15 text-emerald-100 shadow-lg shadow-emerald-500/10"
+          : "border-white/5 bg-white/5 text-white/25";
+
+        return (
+          <button
+            type="button"
+            key={item}
+            disabled={isDisabled || hasBeenUsed}
+            className={`grid h-11 w-11 place-items-center rounded-xl border text-sm font-black uppercase transition sm:h-12 sm:w-12 sm:text-base ${
+              hasBeenUsed
+                ? usedStyle
+                : "border-white/10 bg-white/12 text-white shadow-lg shadow-black/10 hover:-translate-y-1 hover:border-amber-300/40 hover:bg-amber-300 hover:text-slate-950"
+            } ${isWrongGuess ? "line-through" : ""} disabled:cursor-not-allowed`}
+            onClick={() => dispatch(addToGuessedWord(letter))}
+            aria-label={`${item}${isCorrectGuess ? " correct guess" : ""}${isWrongGuess ? " incorrect guess" : ""}`}
+          >
+            {item}
+          </button>
+        );
+      })}
     </div>
   );
 };

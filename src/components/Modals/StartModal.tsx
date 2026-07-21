@@ -1,76 +1,50 @@
-import React, {
-  Dispatch,
-  FunctionComponent,
-  MouseEvent,
-  SetStateAction,
-  useEffect,
-} from "react";
+import React from "react";
 
 import {
   Dialog,
-  DialogClose,
   DialogContent,
   DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
-import { Input } from "../ui/input";
 import { Button } from "../ui/button";
-import { useAppDispatch } from "@/hooks/hooks";
-import { setPlayerName } from "@/store/PlayerInfoSlice";
+import { Input } from "../ui/input";
 
 type ModalProps = {
   open: boolean;
-  closeModal: () => void;
+  closeModal: (name?: string) => void;
 };
 
 export const StartModal = ({ open, closeModal }: ModalProps): JSX.Element => {
-  const dispatch = useAppDispatch();
-
   const [name, setName] = React.useState("");
-  useEffect(() => {
-    const closeButton = document.querySelector("svg");
-    if (closeButton) {
-      closeButton.style.display = "none";
-    }
-  }, []);
-
-  const nameChangeHandler = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    setName(e.target.value);
-  };
-
-  const startClickHandler = (e: MouseEvent) => {
-    dispatch(setPlayerName(name));
-    closeModal();
-  };
-  //const sta;
 
   return (
     <Dialog open={open}>
-      <DialogContent>
+      <DialogContent className="border-white/10 bg-[#11101c] text-white shadow-2xl">
         <DialogHeader>
-          <DialogTitle>
-            Are you a movie fan ? Let's take this CineQuiz!
-          </DialogTitle>
-          <DialogDescription className="!mt-4">
-            <Input
-              className="mt-2"
-              placeholder="Your Name"
-              onChange={nameChangeHandler}
-            />
+          <DialogTitle className="text-2xl font-black">Welcome to CineQuiz</DialogTitle>
+          <DialogDescription className="!mt-3 text-white/60">
+            Guess the hidden movie title using the on-screen or physical keyboard.
           </DialogDescription>
         </DialogHeader>
+
+        <Input
+          className="border-white/10 bg-white/10 text-white placeholder:text-white/35"
+          placeholder="Your name"
+          value={name}
+          onChange={(event) => setName(event.target.value)}
+          onKeyDown={(event) => {
+            if (event.key === "Enter") closeModal(name);
+          }}
+        />
+
         <DialogFooter>
-          <Button className="md:w-2/6 inline-block" onClick={startClickHandler}>
-            Start{" "}
+          <Button className="bg-amber-300 text-slate-950 hover:bg-amber-200" onClick={() => closeModal(name)}>
+            Start game
           </Button>
-          <Button
-            className="md:w-2/6 bg-gray-500 inline-block "
-            onClick={closeModal}
-          >
-            Play as Guest
+          <Button className="bg-white/10 text-white hover:bg-white/15" onClick={() => closeModal("Guest")}>
+            Play as guest
           </Button>
         </DialogFooter>
       </DialogContent>

@@ -1,6 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
 import guessedWordSlice from "./GuessedWordSlice.tsx";
-import movieNameSlice from "./MovieNameSlice";
 import playerInfoSlice from "./PlayerInfoSlice";
 
 export const store = configureStore({

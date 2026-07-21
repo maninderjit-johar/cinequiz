@@ -1,44 +1,34 @@
-import React from "react";
 import { useAppSelector } from "../../hooks/hooks";
 
-const Figure: React.FunctionComponent = () => {
-  const maxCount = useAppSelector((state) => state.guessedWordSlice.maxCount);
+const Figure = () => {
+  const { maxCount, status } = useAppSelector((state) => state.guessedWordSlice);
+  const isLost = status === "lost";
+
   return (
-    <div className="text-3xl sm:my-8  mt-4 mb-1 border-0 rounded w-2/3 h-full relative flex justify-center min-w-[350px]">
-      {/* vertical line  */}
-      <div className="w-2 bg-white h-full sm:mr-24 relative mr-40" />
+    <div className={`figure-stage grid min-h-56 place-items-center overflow-hidden rounded-[1.25rem] bg-black/20 p-4 ${isLost ? "is-lost" : ""}`}>
+      <svg
+        className="h-52 w-full max-w-sm drop-shadow-[0_0_18px_rgba(251,191,36,0.15)]"
+        viewBox="0 0 320 230"
+        role="img"
+        aria-label={`Hangman progress: ${maxCount} incorrect guesses out of 6`}
+      >
+        <line x1="54" y1="206" x2="210" y2="206" className="stroke-white/80" strokeWidth="8" strokeLinecap="round" />
+        <line x1="78" y1="206" x2="78" y2="28" className="stroke-white/80" strokeWidth="8" strokeLinecap="round" />
+        <line x1="78" y1="28" x2="220" y2="28" className="stroke-white/80" strokeWidth="8" strokeLinecap="round" />
+        <line x1="220" y1="28" x2="220" y2="58" className="stroke-white/80" strokeWidth="6" strokeLinecap="round" />
+        <line x1="78" y1="70" x2="120" y2="28" className="stroke-white/25" strokeWidth="5" strokeLinecap="round" />
 
-      {/* top line */}
-      <div className="h-2 w-48 bg-white absolute top-8 sm:ml-2 -ml-8" />
-
-      {/* small vertical line */}
-      <div className="w-2 h-12 bg-white top-8 absolute sm:ml-48 ml-40" />
-
-      {/* Head */}
-      {maxCount > 0 && (
-        <div className="w-12 h-12 rounded-full border-color-white border-4 absolute top-20 sm:ml-48 ml-40 -mt-0.5" />
-      )}
-
-      {/* Body */}
-      {maxCount > 1 && (
-        <div className="w-1 h-20 bg-white absolute sm:ml-48 ml-40 mt-[calc(8rem-3px)]" />
-      )}
-
-      {/* arms */}
-      {maxCount > 2 && (
-        <div className="h-1 w-12 bg-white absolute top-40 sm:ml-[calc(192px+48px)] ml-[calc(192px+18px)] -rotate-45 origin-left" />
-      )}
-      {maxCount > 3 && (
-        <div className="h-1 w-12 bg-white absolute top-40 sm:ml-[calc(192px-48px)] ml-[calc(110px)] rotate-45 origin-right" />
-      )}
-
-      {/* legs */}
-      {maxCount > 4 && (
-        <div className="h-1 w-12 bg-white absolute top-48 sm:ml-[calc(192px-48px)] ml-[calc(110px)] -rotate-45 origin-right mt-2" />
-      )}
-      {maxCount > 5 && (
-        <div className="h-1 w-12 bg-white absolute top-48 sm:ml-[calc(192px+48px)] ml-[calc(192px+18px)]  rotate-45 origin-left mt-2" />
-      )}
+        <g className="hangman-person">
+          {maxCount > 0 && (
+            <circle cx="220" cy="82" r="23" fill="transparent" className="stroke-amber-200" strokeWidth="7" />
+          )}
+          {maxCount > 1 && <line x1="220" y1="107" x2="220" y2="158" className="stroke-amber-200" strokeWidth="7" strokeLinecap="round" />}
+          {maxCount > 2 && <line x1="220" y1="122" x2="187" y2="145" className="stroke-amber-200" strokeWidth="7" strokeLinecap="round" />}
+          {maxCount > 3 && <line x1="220" y1="122" x2="253" y2="145" className="stroke-amber-200" strokeWidth="7" strokeLinecap="round" />}
+          {maxCount > 4 && <line x1="220" y1="157" x2="190" y2="192" className="stroke-amber-200" strokeWidth="7" strokeLinecap="round" />}
+          {maxCount > 5 && <line x1="220" y1="157" x2="250" y2="192" className="stroke-amber-200" strokeWidth="7" strokeLinecap="round" />}
+        </g>
+      </svg>
     </div>
   );
 };
