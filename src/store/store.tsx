@@ -1,11 +1,9 @@
 import { configureStore } from "@reduxjs/toolkit";
 import guessedWordSlice from "./GuessedWordSlice.tsx";
-import playerInfoSlice from "./PlayerInfoSlice";
 
 export const store = configureStore({
   reducer: {
     guessedWordSlice: guessedWordSlice,
-    playerInfoSlice: playerInfoSlice,
   },
 });
 

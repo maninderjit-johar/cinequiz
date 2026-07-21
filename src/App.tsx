@@ -5,35 +5,26 @@ import "./App.css";
 import Figure from "./components/Figure/Figure";
 import Keyboard from "./components/Keyboard/Keyboard";
 import Word from "./components/Word/Word";
-import { StartModal } from "./components/Modals/StartModal";
 import { Button } from "./components/ui/button";
 import { Label } from "./components/ui/label";
 import { Switch } from "./components/ui/switch";
 import { useAppDispatch, useAppSelector } from "./hooks/hooks";
 import { fetchMovieName, resetGame, showAnswer } from "./store/GuessedWordSlice";
-import { setPlayerName } from "./store/PlayerInfoSlice";
 
 function App() {
   const dispatch = useAppDispatch();
-  const [open, setOpen] = useState(true);
   const [showKeyboard, setShowKeyboard] = useState(true);
-  const { maxCount, source, status, usedLetters, wordToGuess } = useAppSelector(
+  const { maxCount, recentTitles, source, status, usedLetters, wordToGuess } = useAppSelector(
     (state) => state.guessedWordSlice
   );
-  const playerName = useAppSelector((state) => state.playerInfoSlice.value);
 
   useEffect(() => {
-    dispatch(fetchMovieName());
+    dispatch(fetchMovieName({ excludeTitles: recentTitles }));
   }, [dispatch]);
-
-  const closeStartModal = (name = "Guest") => {
-    dispatch(setPlayerName(name.trim() || "Guest"));
-    setOpen(false);
-  };
 
   const playAgain = () => {
     dispatch(resetGame());
-    dispatch(fetchMovieName());
+    dispatch(fetchMovieName({ excludeTitles: recentTitles }));
   };
 
   useEffect(() => {
@@ -44,7 +35,7 @@ function App() {
         target?.tagName === "TEXTAREA" ||
         target?.isContentEditable;
 
-      if (open || isTyping) return;
+      if (isTyping) return;
 
       const key = event.key.toLowerCase();
 
@@ -64,7 +55,7 @@ function App() {
     return () => {
       window.removeEventListener("keydown", shortcutHandler);
     };
-  }, [dispatch, open, status]);
+  }, [dispatch, status]);
 
   const gameStatus = useMemo(() => {
     if (status === "won") return "Solved";
@@ -77,7 +68,6 @@ function App() {
 
   return (
     <main className="cinema-app min-h-screen overflow-hidden bg-[#090812] text-white">
-      <StartModal open={open} closeModal={closeStartModal} />
       {status === "won" && (
         <div className="confetti-layer" aria-hidden="true">
           {confettiPieces.map((piece) => (
@@ -86,27 +76,27 @@ function App() {
         </div>
       )}
 
-      <section className="cinema-stage relative isolate min-h-screen px-4 py-5 sm:px-8 lg:px-12">
+      <section className="cinema-stage relative isolate min-h-screen px-3 py-3 sm:px-8 sm:py-5 lg:px-12">
         <div className="absolute inset-0 -z-20 bg-[radial-gradient(circle_at_15%_12%,rgba(251,191,36,0.22),transparent_32%),radial-gradient(circle_at_80%_20%,rgba(244,63,94,0.22),transparent_30%),linear-gradient(135deg,#090812_0%,#151024_50%,#090812_100%)]" />
         <div className="absolute inset-0 -z-10 bg-[linear-gradient(rgba(255,255,255,0.045)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.045)_1px,transparent_1px)] bg-[size:56px_56px] opacity-25" />
-        <section className="camera-frame mx-auto max-w-7xl rounded-[2rem] border border-white/10 bg-slate-950/65 p-4 shadow-2xl shadow-rose-950/20 backdrop-blur-xl sm:p-6 lg:p-8">
+        <section className="camera-frame mx-auto max-w-7xl rounded-[1.5rem] border border-white/10 bg-slate-950/65 p-3 shadow-2xl shadow-rose-950/20 backdrop-blur-xl sm:rounded-[2rem] sm:p-6 lg:p-8">
             <div className="camera-hud mb-6 flex flex-wrap items-center justify-between gap-4">
               <div>
                 <p className="flex items-center gap-2 text-xs font-black uppercase tracking-[0.28em] text-rose-200">
                   <span className="record-dot" aria-hidden="true" /> REC · CineQuiz
                 </p>
-                <h1 className="mt-2 text-3xl font-black leading-none tracking-tight sm:text-5xl">
+                <h1 className="mt-2 text-[2rem] font-black leading-[0.98] tracking-tight sm:text-5xl">
                   Guess the movie before the final frame.
                 </h1>
               </div>
-              <div className="flex flex-wrap items-center gap-2 text-xs font-black uppercase tracking-[0.16em] text-white/65">
+              <div className="hud-pills flex flex-wrap items-center gap-2 text-xs font-black uppercase tracking-[0.16em] text-white/65">
                 <span className="hud-pill">{gameStatus}</span>
                 <span className="hud-pill">{movieSourceLabel}</span>
-                <span className="hud-pill">Player: {playerName || "Guest"}</span>
+                <span className="hud-pill">{6 - maxCount} takes left</span>
               </div>
             </div>
 
-            <div className="director-monitor grid gap-5 lg:grid-cols-[0.78fr_1.22fr]">
+            <div className="director-monitor grid gap-4 lg:grid-cols-[0.78fr_1.22fr] lg:gap-5">
               <aside className="monitor-sidebar">
                 <div className="lens-copy">
                   <Film className="h-6 w-6 text-amber-200" aria-hidden="true" />
@@ -131,7 +121,7 @@ function App() {
                   </div>
                 </div>
 
-                <div className="mt-5 flex flex-col gap-3 sm:flex-row lg:flex-col">
+                <div className="action-row mt-5 flex flex-col gap-3 sm:flex-row lg:flex-col">
                   <Button className="gap-2 bg-amber-300 text-slate-950 hover:bg-amber-200" onClick={playAgain}>
                     <RotateCcw className="h-4 w-4" />
                     <span>New movie</span>
@@ -168,7 +158,7 @@ function App() {
                   <Figure />
                 </div>
 
-                <div className="answer-reel my-5 flex min-h-32 items-center justify-center rounded-[1.5rem] border border-white/10 bg-black/20 p-5">
+                <div className="answer-reel my-4 flex min-h-28 items-center justify-center rounded-[1.2rem] border border-white/10 bg-black/20 p-3 sm:my-5 sm:min-h-32 sm:rounded-[1.5rem] sm:p-5">
                   {status === "loading" ? (
                     <p className="animate-pulse text-lg font-bold text-white/65">Loading a movie...</p>
                   ) : (

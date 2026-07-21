@@ -356,8 +356,111 @@
 }
 
 @media (max-width: 720px) {
+  .camera-frame {
+    margin-top: 0;
+  }
+
+  .camera-frame::before {
+    inset: 0.6rem;
+    border-radius: 1.1rem;
+  }
+
+  .camera-hud {
+    margin-bottom: 1rem;
+  }
+
+  .camera-hud h1 {
+    max-width: 11ch;
+  }
+
+  .hud-pills {
+    width: 100%;
+    gap: 0.45rem;
+    letter-spacing: 0.08em;
+  }
+
+  .hud-pill {
+    flex: 1 1 auto;
+    padding: 0.45rem 0.58rem;
+    text-align: center;
+  }
+
+  .director-monitor {
+    border-radius: 1.15rem;
+    padding: 0.65rem;
+  }
+
+  .monitor-sidebar {
+    border-radius: 1rem;
+  }
+
+  .monitor-sidebar::before {
+    display: none;
+  }
+
+  .lens-copy {
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    line-height: 1.55;
+  }
+
+  .readout-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.45rem;
+    margin-top: 1rem;
+  }
+
+  .readout-grid div {
+    border-radius: 0.85rem;
+    padding: 0.65rem 0.55rem;
+  }
+
+  .readout-grid strong {
+    font-size: 1.25rem;
+  }
+
+  .readout-grid span {
+    font-size: 0.58rem;
+    line-height: 1.25;
+  }
+
+  .action-row button {
+    min-height: 2.75rem;
+    width: 100%;
+  }
+
+  .projection-window {
+    border-radius: 1rem !important;
+  }
+
+  .movie-word {
+    max-width: 100%;
+  }
+
+  .movie-word-group {
+    max-width: 100%;
+  }
+
+  .movie-keyboard {
+    width: 100%;
+  }
+}
+
+@media (max-width: 380px) {
+  .hud-pill {
+    flex-basis: 100%;
+  }
+
   .readout-grid {
     grid-template-columns: 1fr;
+  }
+
+  .movie-word {
+    gap: 0.65rem 0.5rem;
+  }
+
+  .movie-word-group {
+    gap: 0.25rem;
   }
 }
 

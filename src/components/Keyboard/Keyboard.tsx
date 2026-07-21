@@ -27,7 +27,7 @@ const Keyboard = () => {
   }, [dispatch]);
 
   return (
-    <div className="mx-auto flex max-w-2xl flex-wrap justify-center gap-2">
+    <div className="movie-keyboard mx-auto grid max-w-2xl grid-cols-7 justify-center gap-1.5 min-[390px]:grid-cols-8 sm:flex sm:flex-wrap sm:gap-2">
       {alphabets.map((item: string) => {
         const letter = item.toLowerCase();
         const hasBeenUsed = usedLetters.includes(letter);
@@ -42,7 +42,7 @@ const Keyboard = () => {
             type="button"
             key={item}
             disabled={isDisabled || hasBeenUsed}
-            className={`grid h-11 w-11 place-items-center rounded-xl border text-sm font-black uppercase transition sm:h-12 sm:w-12 sm:text-base ${
+            className={`grid h-10 w-full min-w-0 place-items-center rounded-xl border text-sm font-black uppercase transition sm:h-12 sm:w-12 sm:text-base ${
               hasBeenUsed
                 ? usedStyle
                 : "border-white/10 bg-white/12 text-white shadow-lg shadow-black/10 hover:-translate-y-1 hover:border-amber-300/40 hover:bg-amber-300 hover:text-slate-950"

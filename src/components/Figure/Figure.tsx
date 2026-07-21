@@ -5,9 +5,9 @@ const Figure = () => {
   const isLost = status === "lost";
 
   return (
-    <div className={`figure-stage grid min-h-56 place-items-center overflow-hidden rounded-[1.25rem] bg-black/20 p-4 ${isLost ? "is-lost" : ""}`}>
+    <div className={`figure-stage grid min-h-40 place-items-center overflow-hidden rounded-[1rem] bg-black/20 p-2 sm:min-h-56 sm:rounded-[1.25rem] sm:p-4 ${isLost ? "is-lost" : ""}`}>
       <svg
-        className="h-52 w-full max-w-sm drop-shadow-[0_0_18px_rgba(251,191,36,0.15)]"
+        className="h-36 w-full max-w-[17rem] drop-shadow-[0_0_18px_rgba(251,191,36,0.15)] sm:h-52 sm:max-w-sm"
         viewBox="0 0 320 230"
         role="img"
         aria-label={`Hangman progress: ${maxCount} incorrect guesses out of 6`}

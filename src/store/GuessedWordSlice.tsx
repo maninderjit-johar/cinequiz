@@ -6,24 +6,55 @@ import { randomNumberGenerator } from "../utils/randomNumberGenerator";
 
 const FALLBACK_MOVIES = [
   "The Dark Knight",
+  "The Dark Knight Rises",
   "Interstellar",
   "Inception",
   "Jurassic Park",
+  "The Lost World Jurassic Park",
   "Black Panther",
   "Mad Max Fury Road",
   "The Matrix",
-  "Spider Man",
+  "The Matrix Reloaded",
+  "Spider Man Into the Spider Verse",
   "Top Gun Maverick",
   "Mission Impossible",
+  "Mission Impossible Fallout",
   "Guardians of the Galaxy",
   "The Social Network",
+  "The Grand Budapest Hotel",
+  "Back to the Future",
+  "Raiders of the Lost Ark",
+  "The Shawshank Redemption",
+  "Forrest Gump",
+  "The Lion King",
+  "Finding Nemo",
+  "Toy Story",
+  "The Avengers",
+  "Captain America Civil War",
+  "Wonder Woman",
+  "The Batman",
+  "Dune",
+  "Oppenheimer",
+  "The Prestige",
+  "Avatar",
+  "Blade Runner",
+  "Casino Royale",
+  "John Wick",
+  "The Bourne Identity",
+  "Indiana Jones",
+  "Pirates of the Caribbean",
+  "The Lord of the Rings",
+  "Harry Potter",
 ];
+
+const RECENT_TITLE_LIMIT = 10;
 
 interface GuessedWordState {
   value: string[];
   maxCount: number;
   wordToGuess: string;
   usedLetters: string[];
+  recentTitles: string[];
   status: "idle" | "loading" | "playing" | "won" | "lost";
   source: "tmdb" | "curated";
 }
@@ -33,12 +64,23 @@ const initialState: GuessedWordState = {
   maxCount: 0,
   wordToGuess: "",
   usedLetters: [],
+  recentTitles: [],
   status: "idle",
   source: "curated",
 };
 
-const pickFallbackMovie = () =>
-  FALLBACK_MOVIES[randomNumberGenerator(0, FALLBACK_MOVIES.length - 1)];
+const normalizeTitle = (title: string) => title.trim().toLowerCase();
+
+const pickMovieTitle = (titles: string[], excludeTitles: string[] = []) => {
+  const excluded = new Set(excludeTitles.map(normalizeTitle));
+  const availableTitles = titles.filter((title) => !excluded.has(normalizeTitle(title)));
+  const titlePool = availableTitles.length > 0 ? availableTitles : titles;
+
+  return titlePool[randomNumberGenerator(0, titlePool.length - 1)];
+};
+
+const pickFallbackMovie = (excludeTitles: string[] = []) =>
+  pickMovieTitle(FALLBACK_MOVIES, excludeTitles);
 
 const isSolved = (title: string, guesses: string[]) =>
   title
@@ -63,12 +105,16 @@ const revealTitleLetters = (state: GuessedWordState) => {
 
 export const fetchMovieName = createAsyncThunk(
   "movieName/fetchMovieName",
-  async (): Promise<{ title: string; source: "tmdb" | "curated" }> => {
+  async ({
+    excludeTitles = [],
+  }: {
+    excludeTitles?: string[];
+  } = {}): Promise<{ title: string; source: "tmdb" | "curated" }> => {
     const baseUrl = import.meta.env.VITE_MOVIEDB_BASE_URL;
     const apiKey = import.meta.env.VITE_MOVIEDB;
 
     if (!baseUrl || !apiKey) {
-      return { title: pickFallbackMovie(), source: "curated" };
+      return { title: pickFallbackMovie(excludeTitles), source: "curated" };
     }
 
     try {
@@ -86,12 +132,14 @@ export const fetchMovieName = createAsyncThunk(
       filters.set("page", String(randomNumberGenerator(1, totalPages)));
 
       const movieResponse = await axios.get(`${baseUrl}${filters.toString()}`);
-      const movies = movieResponse.data.results?.filter((movie: { title?: string }) => movie.title);
-      const movie = movies?.[randomNumberGenerator(0, movies.length - 1)];
+      const movies = movieResponse.data.results
+        ?.map((movie: { title?: string }) => movie.title)
+        .filter(Boolean);
+      const title = movies?.length ? pickMovieTitle(movies, excludeTitles) : "";
 
-      return { title: movie?.title || pickFallbackMovie(), source: movie?.title ? "tmdb" : "curated" };
+      return { title: title || pickFallbackMovie(excludeTitles), source: title ? "tmdb" : "curated" };
     } catch {
-      return { title: pickFallbackMovie(), source: "curated" };
+      return { title: pickFallbackMovie(excludeTitles), source: "curated" };
     }
   }
 );
@@ -145,11 +193,20 @@ export const guessedWordSlice = createSlice({
       .addCase(fetchMovieName.fulfilled, (state, action) => {
         state.wordToGuess = action.payload.title;
         state.source = action.payload.source;
+        state.recentTitles = [
+          action.payload.title,
+          ...state.recentTitles.filter((title) => normalizeTitle(title) !== normalizeTitle(action.payload.title)),
+        ].slice(0, RECENT_TITLE_LIMIT);
         state.status = "playing";
       })
       .addCase(fetchMovieName.rejected, (state) => {
-        state.wordToGuess = pickFallbackMovie();
+        const title = pickFallbackMovie(state.recentTitles);
+        state.wordToGuess = title;
         state.source = "curated";
+        state.recentTitles = [
+          title,
+          ...state.recentTitles.filter((recentTitle) => normalizeTitle(recentTitle) !== normalizeTitle(title)),
+        ].slice(0, RECENT_TITLE_LIMIT);
         state.status = "playing";
       });
   },
