@@ -4,7 +4,7 @@ A cinematic movie-title guessing game built with React, TypeScript, Redux Toolki
 
 CineQuiz turns the classic hangman format into a polished movie challenge with keyboard input, async title loading, reveal states, restart flow, success/failure animations, and demo-safe fallback data.
 
-> Live demo: deployment link coming shortly.
+> Live demo: [maninderjit-johar.github.io/cinequiz](https://maninderjit-johar.github.io/cinequiz/)
 
 ## What it demonstrates
 
