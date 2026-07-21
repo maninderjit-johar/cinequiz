@@ -6,6 +6,8 @@ CineQuiz turns the classic hangman format into a polished movie challenge with k
 
 > Live demo: [maninderjit-johar.github.io/cinequiz](https://maninderjit-johar.github.io/cinequiz/)
 
+![CineQuiz game interface](public/screenshot.png)
+
 ## What it demonstrates
 
 - Production-minded React + TypeScript component structure
